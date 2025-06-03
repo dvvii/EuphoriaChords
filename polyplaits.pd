@@ -1,0 +1,15 @@
+#N canvas 203 522 450 300 12;
+#X obj 59 14 inlet;
+#X obj 59 38 unpack f f;
+#X obj 79 184 outlet~;
+#X obj 164 84 r params;
+#X floatatom 57 63 5 0 0 0 - - - 0;
+#X floatatom 101 65 5 0 0 0 - - - 0;
+#X obj 83 137 else/plaits~ -midi -tr_active;
+#X connect 0 0 1 0;
+#X connect 1 0 4 0;
+#X connect 1 1 5 0;
+#X connect 3 0 6 0;
+#X connect 4 0 6 0;
+#X connect 5 0 6 1;
+#X connect 6 0 2 0;
