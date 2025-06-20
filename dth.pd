@@ -1,0 +1,10 @@
+#N canvas 370 349 450 300 12;
+#X obj 153 102 inlet;
+#X obj 153 125 makefilename %X;
+#X listbox 153 149 20 0 0 0 - - - 0;
+#X obj 153 172 outlet;
+#X text 154 38 convert decimal to hex;
+#X text 154 57 inlet is float \, outlet is symbol;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 2 0 3 0;
