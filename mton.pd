@@ -3,13 +3,13 @@
 #X floatatom 17 230 5 0 0 0 - - - 0;
 #X floatatom 17 185 5 0 0 0 - - - 0;
 #X obj 17 208 % 12;
-#X obj 121 206 / 12;
-#X floatatom 121 252 5 0 0 0 - - - 0;
-#X obj 121 230 - 2;
-#X obj 121 275 i;
+#X obj 144 206 / 12;
+#X floatatom 144 252 5 0 0 0 - - - 0;
+#X obj 144 230 - 2;
+#X obj 144 275 i;
 #X obj 17 163 inlet;
 #X obj 17 297 outlet;
-#X obj 121 297 outlet;
+#X obj 144 297 outlet;
 #X obj 20 78 loadbang;
 #X obj 19 142 text define -k \$0-notes;
 #A set C \; C# \; D \; D# \; E \; F \; F# \; G \; G# \; A \; A# \; B;
