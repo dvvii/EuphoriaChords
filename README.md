@@ -11,4 +11,5 @@ TODO: add the list for easier reference.
 Chords.pd is functional 
 chordsVL.pd is in development to implement voice leading between current and chosen chords.
 
-
+Current development will add support for [Dualo Exquis controller](https://dualo.com/en/exquis/)
+ 
