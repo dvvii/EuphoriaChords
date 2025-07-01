@@ -1,0 +1,25 @@
+
+#N canvas 100 100 1000 500 deduplicate_list 0;
+#X obj 50 30 list;
+#X obj 50 60 cyclone/iter;
+#X obj 50 90 t a a;
+#X obj 120 90 text search seen;
+#X obj 120 120 sel -1;
+#X obj 120 150 t b a;
+#X obj 200 150 text insert seen;
+#X obj 50 180 list store;
+#X obj 50 210 bang;
+#X obj 50 240 list;
+#X obj 50 270 print result;
+#X obj 220 30 text define seen;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 2 0 7 1;
+#X connect 2 1 3 0;
+#X connect 3 0 4 0;
+#X connect 4 0 5 0;
+#X connect 5 0 6 0;
+#X connect 5 1 7 0;
+#X connect 7 0 8 0;
+#X connect 8 0 9 0;
+#X connect 9 0 10 0;
