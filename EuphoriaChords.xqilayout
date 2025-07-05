@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<LAYOUT name="EuphoriaChords" isomorphic="0" topLeftInterval="1" topRightInterval="1"
+        twoPath="0" transpose="0" flipX="1" flipY="0" flipXY="1">
+  <NOTE_LIST>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="62" colour="ff4fcdf6"/>
+    <NOTE noteNumber="65" colour="ff355eab"/>
+    <NOTE noteNumber="60" colour="ff17663d"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="69" colour="ff39d282"/>
+    <NOTE noteNumber="64" colour="ff39d282"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="71" colour="fff7696e"/>
+    <NOTE noteNumber="67" colour="ffd9232a"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="43" colour="0"/>
+    <NOTE noteNumber="43" colour="0"/>
+    <NOTE noteNumber="43" colour="0"/>
+    <NOTE noteNumber="43" colour="0"/>
+    <NOTE noteNumber="43" colour="0"/>
+    <NOTE noteNumber="43" colour="0"/>
+    <NOTE noteNumber="71" colour="fff7696e"/>
+    <NOTE noteNumber="64" colour="ff39d282"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="65" colour="ff355eab"/>
+    <NOTE noteNumber="60" colour="ff009949"/>
+    <NOTE noteNumber="69" colour="ff39d282"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="67" colour="ffd9232a"/>
+    <NOTE noteNumber="62" colour="ff4fcdf6"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="50" colour="fff2d24f"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="54" colour="fff2d24f"/>
+    <NOTE noteNumber="51" colour="fff2d24f"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="52" colour="fff2d24f"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="00" colour="0"/>
+    <NOTE noteNumber="53" colour="fff2d24f"/>
+  </NOTE_LIST>
+</LAYOUT>
