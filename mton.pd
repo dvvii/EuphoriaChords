@@ -14,7 +14,7 @@
 #X obj 17 251 text get \$0-notes;
 #X msg 20 103 set C \\\; C# \\\; D \\\; D# \\\; E \\\; F \\\; F# \\\; G \\\; G# \\\; A \\\; A# \\\; B;
 #X obj 17 187 t f f;
-#X obj 67 303 pack s i;
+#X obj 72 305 pack s f;
 #X connect 0 0 14 0;
 #X connect 1 0 11 0;
 #X connect 2 0 1 0;
