@@ -1,0 +1,6 @@
+prescaler 2;
+padThreshold0 0.2;
+padThreshold1 0.2;
+padThreshold2 0.2;
+padThreshold3 0.2;
+padThreshold4 0.2;
