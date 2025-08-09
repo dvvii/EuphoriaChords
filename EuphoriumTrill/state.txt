@@ -4,3 +4,4 @@ padThreshold1 0.2;
 padThreshold2 0.2;
 padThreshold3 0.2;
 padThreshold4 0.2;
+debugRing 1;
