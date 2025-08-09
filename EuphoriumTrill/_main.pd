@@ -105,7 +105,7 @@
 #X obj 5 110 - 12;
 #X obj 177 668 dac~;
 #X obj 5 82 t f f;
-#N canvas 53 104 1413 844 Trill 0;
+#N canvas 53 104 1413 844 Trill 1;
 #X obj 241 135 s bela_setTrill;
 #X text 72 10 Initialise Trill sensor;
 #X obj 231 283 s bela_setTrill;
@@ -124,7 +124,7 @@
 #X obj 1025 280 pack, f 8;
 #X obj 1109 122 t f f, f 8;
 #X obj 1109 283 pack, f 8;
-#X obj 766 330 s Pad0;
+#X obj 755 280 s Pad0;
 #X obj 850 295 s Pad1;
 #X obj 937 301 s Pad2;
 #X obj 1025 303 s Pad3;
@@ -160,7 +160,7 @@
 #X obj 23 451 print pad5;
 #X obj 241 27 r initialiseTrill;
 #X msg 241 92 new pads 1 CRAFT \, prescaler pads 2 \, threshold pads 0.1 \, scanSettings pads 0 12;
-#X obj 739 290 change;
+#X obj 717 304 change;
 #X obj 833 328 change;
 #X obj 926 331 change;
 #X obj 1016 331 change;
@@ -190,7 +190,7 @@
 #X connect 7 0 31 0;
 #X connect 8 0 38 0;
 #X connect 8 1 9 1;
-#X connect 9 0 54 0;
+#X connect 9 0 18 0;
 #X connect 10 0 39 0;
 #X connect 10 1 11 1;
 #X connect 11 0 19 0;
@@ -206,6 +206,7 @@
 #X connect 16 1 17 1;
 #X connect 17 0 22 0;
 #X connect 23 0 8 0;
+#X connect 23 0 54 0;
 #X connect 23 1 10 0;
 #X connect 23 1 55 0;
 #X connect 23 2 12 0;
@@ -243,7 +244,6 @@
 #X connect 52 0 60 0;
 #X connect 53 0 0 0;
 #X connect 54 0 75 0;
-#X connect 54 0 18 0;
 #X connect 55 0 76 0;
 #X connect 56 0 77 0;
 #X connect 57 0 78 0;
