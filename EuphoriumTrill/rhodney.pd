@@ -1,4 +1,4 @@
-#N canvas 175 167 1043 795 10;
+#N canvas 717 121 1043 795 10;
 #X declare -path ./rj;
 #X obj 426 352 hsl 128 15 0 1 0 0 empty empty tone_(0...1) 20 7 1 10 #fcfcfc #000000 #000000 0 1;
 #X text 136 42 Inlet 0: midi note/velocity pairs;
@@ -41,6 +41,7 @@
 #X obj 147 476 hip~ 5;
 #X obj 432 472 r vib-freq;
 #X obj 544 469 r vib-depth;
+#X obj 547 566 r adsr;
 #X connect 0 0 4 0;
 #X connect 4 0 3 0;
 #X connect 6 0 12 0;
@@ -64,3 +65,4 @@
 #X connect 38 0 29 0;
 #X connect 39 0 6 0;
 #X connect 40 0 8 0;
+#X connect 41 0 19 0;
