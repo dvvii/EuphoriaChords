@@ -1,2 +1,10 @@
-prescaler 7;
-timbre 2;
+prescaler 3;
+padThreshold0 0.2;
+padThreshold1 0.2;
+padThreshold2 0.2;
+padThreshold5 0.5;
+padThreshold4 0.2;
+padThreshold3 0.2;
+debugRing 0;
+debugRoot 0;
+debugNeoPixel 0;
