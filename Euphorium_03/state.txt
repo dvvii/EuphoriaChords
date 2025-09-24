@@ -1,0 +1,12 @@
+prescaler 1;
+threshold 0.05;
+padThreshold0 0.03;
+padThreshold1 0.03;
+padThreshold2 0.03;
+padThreshold5 0.03;
+padThreshold4 0.03;
+padThreshold3 0.03;
+debugRing 0;
+debugRoot 0;
+debugNeoPixel 0;
+reverbAmount 0.2;
