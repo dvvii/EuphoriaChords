@@ -1,4 +1,4 @@
-#N canvas 928 353 992 674 12;
+#N canvas 1185 84 610 674 12;
 #X obj 15 38 loadbang;
 #X obj 212 161 oscparse;
 #X obj 212 190 route list;
@@ -6,7 +6,7 @@
 #X obj 279 238 pipe 1;
 #X obj 226 279 send;
 #X obj 349 245 print oscreceive;
-#X obj 220 139 s toPresets;
+#X obj 246 132 s toPresets;
 #X msg 26 85 disconnect;
 #X obj 15 228 netsend -u -b;
 #X obj 42 112 r forTouchOSC;

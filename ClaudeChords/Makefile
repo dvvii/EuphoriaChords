@@ -4,8 +4,7 @@
 UNAME := $(shell uname -s)
 
 # Common settings
-NAME = hungarian
-CSRC = hungarian.c
+EXTERNALS = hungarian orbifold
 
 # PD include path (adjust as needed)
 PD_INCLUDE = /usr/include/pd
@@ -26,12 +25,15 @@ ifeq ($(UNAME), Linux)
     LDFLAGS = -shared
 endif
 
-# Build target
-$(NAME).$(EXTENSION): $(CSRC)
+# Build targets
+all: $(EXTERNALS:%=%.$(EXTENSION))
+
+%.$(EXTENSION): %.c
 	gcc $(CFLAGS) -I$(PD_INCLUDE) -o $@ $< $(LDFLAGS)
 
 clean:
 	rm -f *.pd_* *.o
 
-install: $(NAME).$(EXTENSION)
-	cp $< ~/pd-externals/
+install: $(EXTERNALS:%=%.$(EXTENSION))
+	mkdir -p ~/pd-externals/
+	cp $^ ~/pd-externals/
