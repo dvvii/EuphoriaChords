@@ -1,5 +1,5 @@
-#N canvas 351 233 403 353 12;
-#N canvas 192 177 1687 875 Trill 1;
+#N canvas 475 481 403 353 12;
+#N canvas 192 177 1687 875 Trill 0;
 #X obj 191 267 s bela_setTrill;
 #X text 72 10 Initialise Trill sensor;
 #X obj 28 529 s bela_setTrill;
@@ -187,7 +187,6 @@
 #X connect 77 0 73 0;
 #X connect 77 0 74 0;
 #X connect 78 0 72 0;
-#X connect 78 1 96 0;
 #X connect 80 0 79 0;
 #X connect 81 0 83 0;
 #X connect 82 0 81 0;
@@ -254,8 +253,8 @@
 #X floatatom 364 75 3 0 0 0 - - - 0;
 #X floatatom 328 75 3 0 0 0 - - - 0;
 #X floatatom 400 75 3 0 0 0 - - - 0;
-#X obj 22 27 nbx 5 17 -1e+37 1e+37 0 1 empty LedsOffset LedsOffset 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
-#X obj 90 27 nbx 5 17 -1e+37 1e+37 0 1 empty LedsBrightness LedsBrightness 0 -10 0 12 #fcfcfc #000000 #000000 2 256;
+#X obj 22 27 nbx 5 17 -1e+37 1e+37 0 1 empty LedsOffset LedsOffset 0 -10 0 12 #fcfcfc #000000 #000000 1 256;
+#X obj 90 27 nbx 5 17 -1e+37 1e+37 0 1 empty LedsBrightness LedsBrightness 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X obj 292 96 pack f f f f, f 16;
 #X floatatom 292 9 5 0 23 0 - - - 0;
 #X obj 23 50 LedAddress;
