@@ -1,5 +1,5 @@
 #N canvas 351 233 403 353 12;
-#N canvas 348 653 1687 875 Trill 1;
+#N canvas 192 177 1687 875 Trill 1;
 #X obj 191 267 s bela_setTrill;
 #X text 72 10 Initialise Trill sensor;
 #X obj 28 529 s bela_setTrill;
