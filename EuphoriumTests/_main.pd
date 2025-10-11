@@ -1,4 +1,4 @@
-#N canvas 475 481 403 353 12;
+#N canvas 611 482 403 353 12;
 #N canvas 192 177 1687 875 Trill 0;
 #X obj 191 267 s bela_setTrill;
 #X text 72 10 Initialise Trill sensor;
@@ -187,6 +187,7 @@
 #X connect 77 0 73 0;
 #X connect 77 0 74 0;
 #X connect 78 0 72 0;
+#X connect 78 1 96 0;
 #X connect 80 0 79 0;
 #X connect 81 0 83 0;
 #X connect 82 0 81 0;
@@ -246,15 +247,15 @@
 #X obj 181 33 bng 40 250 50 0 led_5 empty 5 13 20 0 24 #c7c6ff #000000 #000000;
 #X obj 225 256 bng 40 250 50 0 led_0 empty 0 13 20 0 24 #c7c6ff #000000 #000000;
 #X obj 125 34 bng 40 250 50 0 led_4 empty 4 13 20 0 24 #c7c6ff #000000 #000000;
-#N canvas 648 348 1049 704 Neopixel 1;
+#N canvas 648 348 1049 704 Neopixel 0;
 #X obj 328 32 LedColors;
 #X listbox 333 10 13 0 0 0 - - - 0;
 #X listbox 328 53 15 0 0 0 - - - 0;
 #X floatatom 364 75 3 0 0 0 - - - 0;
 #X floatatom 328 75 3 0 0 0 - - - 0;
 #X floatatom 400 75 3 0 0 0 - - - 0;
-#X obj 22 27 nbx 5 17 -1e+37 1e+37 0 1 empty LedsOffset LedsOffset 0 -10 0 12 #fcfcfc #000000 #000000 1 256;
-#X obj 90 27 nbx 5 17 -1e+37 1e+37 0 1 empty LedsBrightness LedsBrightness 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
+#X obj 22 27 nbx 5 17 -1e+37 1e+37 0 1 empty LedsOffset LedsOffset 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
+#X obj 90 27 nbx 5 17 -1e+37 1e+37 0 1 empty LedsBrightness LedsBrightness 0 -10 0 12 #fcfcfc #000000 #000000 5 256;
 #X obj 292 96 pack f f f f, f 16;
 #X floatatom 292 9 5 0 23 0 - - - 0;
 #X obj 23 50 LedAddress;
@@ -346,3 +347,14 @@
 #X connect 48 2 11 0;
 #X restore 32 82 pd Neopixel;
 #X obj 286 54 bng 40 250 50 0 LedsOff empty Leds\ Off 0 -10 0 12 #fcfcfc #000000 #000000;
+#N canvas 179 210 450 300 pressure 1;
+#X obj 21 95 change;
+#X obj 21 17 adc~ 3;
+#X obj 21 124 print pressure;
+#X obj 21 41 iemlib/unsig~ 100;
+#X obj 23 68 expr floor($f1 * 100 + 0.5) / 100;
+#X connect 0 0 2 0;
+#X connect 1 0 3 0;
+#X connect 3 0 4 0;
+#X connect 4 0 0 0;
+#X restore 31 120 pd pressure;
