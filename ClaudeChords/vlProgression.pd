@@ -1,0 +1,208 @@
+#N canvas 50 50 1200 800 12;
+
+#X text 20 20 Voice Leading - Chord Progression Builder;
+#X text 20 40 Uses root + chord method like the Hungarian patch;
+
+#X text 20 80 === Setup: Store Chord Degrees ===;
+#X obj 20 100 loadbang;
+#X msg 20 125 0 4 7;
+#X obj 20 150 s maj_triad;
+#X msg 100 125 0 3 7;
+#X obj 100 150 s min_triad;
+#X msg 180 125 0 4 7 10;
+#X obj 180 150 s dom7;
+#X msg 260 125 0 4 7 11;
+#X obj 260 150 s maj7;
+
+#X text 20 190 === Control: Select Root & Chord Type ===;
+#X obj 20 210 bng 30 250 50 0 empty play_chord Play 5 15 0 12 #fcfcfc #000000 #000000;
+#X floatatom 70 220 5 0 11 0 Root - -;
+#X obj 70 245 s current_root;
+#X obj 140 210 hradio 19 1 0 4 empty chord_type empty 0 -8 0 10 #fcfcfc #000000 #000000 0;
+#X text 140 235 Major;
+#X text 165 235 Minor;
+#X text 190 235 Dom7;
+#X text 215 235 Maj7;
+
+#X text 20 280 === Voice Leading Calculator ===;
+#X obj 20 300 r play_chord;
+#X obj 20 325 t b b b;
+#X obj 20 350 r current_root;
+#X obj 85 350 r chord_type;
+#X obj 85 375 sel 0 1 2 3;
+#X obj 85 400 r maj_triad;
+#X obj 125 400 r min_triad;
+#X obj 165 400 r dom7;
+#X obj 205 400 r maj7;
+
+#X obj 20 450 voice_leading;
+#X msg 20 475 feedback 1;
+#X obj 20 500 s voiceled_chord;
+
+#X text 20 540 === Initialize with Starting Chord ===;
+#X msg 20 560 current 60 64 67 72;
+#X obj 20 585 s init_chord;
+#X obj 180 560 r init_chord;
+#X obj 180 585 voice_leading;
+
+#X text 20 620 === Output & Display ===;
+#X obj 20 640 r voiceled_chord;
+#X obj 20 665 unpack f f f f;
+#X floatatom 20 690 5 40 84 0 Bass - -;
+#X floatatom 70 690 5 40 84 0 Voice_1 - -;
+#X floatatom 120 690 5 40 84 0 Voice_2 - -;
+#X floatatom 170 690 5 40 84 0 Voice_3 - -;
+
+#X obj 250 640 r voiceled_chord;
+#X obj 250 665 poly 4 1;
+#X obj 250 690 pack f f f;
+#X obj 250 715 s midi_note;
+
+#X text 20 750 === Common Progressions (Click to play) ===;
+#X msg 360 750 0 \, 5 \, 7 \, 0;
+#X text 470 750 I - IV - V - I (C - F - G - C);
+#X msg 360 775 0 \, 9 \, 5 \, 0;
+#X text 470 775 I - vi - IV - I (C - Am - F - C);
+
+#X text 700 80 === Extended Example: Jazz ii-V-I ===;
+#X obj 700 100 bng 30 250 50 0 empty play_progression Play 5 15 0 12 #fcfcfc #000000 #000000;
+#X msg 700 140 2 \, 7 \, 0;
+#X text 780 140 <- Dm7 - G7 - Cmaj7;
+#X obj 700 165 list prepend;
+#X obj 700 190 list trim;
+#X obj 700 215 list split 1;
+#X obj 700 240 t b f;
+#X obj 700 265 del 500;
+#X msg 820 140 1;
+#X obj 820 165 s progression_type;
+#X obj 750 240 r progression_type;
+#X obj 750 265 sel 0 1 2;
+#X obj 750 290 r min7;
+#X obj 790 290 r dom7;
+#X obj 830 290 r maj7;
+
+#X msg 870 100 0 3 7 10;
+#X obj 870 125 s min7;
+
+#X obj 700 340 voice_leading;
+#X obj 700 365 s progression_out;
+#X obj 700 390 r progression_out;
+#X obj 700 415 unpack f f f f;
+#X floatatom 700 440 5 0 0 0 - - -;
+#X floatatom 740 440 5 0 0 0 - - -;
+#X floatatom 780 440 5 0 0 0 - - -;
+#X floatatom 820 440 5 0 0 0 - - -;
+
+#X text 700 480 === Tips ===;
+#X text 700 500 1. The external maintains state with feedback;
+#X text 700 520 2. Each chord smoothly voice leads from previous;
+#X text 700 540 3. Change root & type independently;
+#X text 700 560 4. Debug mode shows the algorithm's work;
+
+#X msg 360 560 debug 1;
+#X text 440 560 <- See voice leading calculations;
+
+#X text 360 620 === Chromatic Movement ===;
+#X msg 360 640 0 \, 1 \, 2 \, 3 \, 4 \, 5;
+#X text 530 640 <- Chromatic ascent;
+#X msg 360 665 0 \, 11 \, 10 \, 9 \, 8 \, 7;
+#X text 530 665 <- Chromatic descent;
+
+#X obj 360 690 list prepend;
+#X obj 360 715 list trim;
+#X obj 360 740 list split 1;
+#X obj 360 765 t b f;
+#X obj 360 790 del 300;
+#X obj 410 765 s chromatic_root;
+#X obj 480 740 voice_leading;
+#X msg 480 690 chord 0 4 7;
+#X obj 480 715 r chromatic_root;
+
+#X connect 0 0 4 0;
+#X connect 0 0 6 0;
+#X connect 0 0 8 0;
+#X connect 0 0 10 0;
+#X connect 4 0 5 0;
+#X connect 6 0 7 0;
+#X connect 8 0 9 0;
+#X connect 10 0 11 0;
+
+#X connect 13 0 22 0;
+#X connect 14 0 15 0;
+
+#X connect 22 0 23 0;
+#X connect 23 0 24 0;
+#X connect 23 1 25 0;
+#X connect 23 2 32 0;
+#X connect 24 0 31 0;
+#X connect 25 0 26 0;
+#X connect 26 0 27 0;
+#X connect 26 1 28 0;
+#X connect 26 2 29 0;
+#X connect 26 3 30 0;
+#X connect 27 0 31 0;
+#X connect 28 0 31 0;
+#X connect 29 0 31 0;
+#X connect 30 0 31 0;
+
+#X connect 31 1 33 0;
+#X connect 32 0 31 0;
+#X connect 35 0 36 0;
+#X connect 37 0 38 0;
+
+#X connect 40 0 41 0;
+#X connect 41 0 42 0;
+#X connect 41 1 43 0;
+#X connect 41 2 44 0;
+#X connect 41 3 45 0;
+
+#X connect 46 0 47 0;
+#X connect 47 0 48 0;
+#X connect 47 1 48 1;
+#X connect 47 2 48 2;
+#X connect 48 0 49 0;
+
+#X connect 51 0 59 0;
+#X connect 53 0 59 0;
+
+#X connect 56 0 57 0;
+#X connect 57 0 58 0;
+#X connect 58 0 59 0;
+#X connect 64 0 65 0;
+#X connect 59 0 60 0;
+#X connect 59 0 61 0;
+#X connect 60 0 62 0;
+#X connect 60 1 66 0;
+#X connect 61 0 63 0;
+#X connect 62 0 73 0;
+#X connect 62 0 64 0;
+#X connect 66 0 67 0;
+#X connect 67 0 68 0;
+#X connect 67 1 69 0;
+#X connect 67 2 70 0;
+#X connect 68 0 73 0;
+#X connect 69 0 73 0;
+#X connect 70 0 73 0;
+
+#X connect 71 0 72 0;
+
+#X connect 73 1 74 0;
+#X connect 75 0 76 0;
+#X connect 76 0 77 0;
+#X connect 76 1 78 0;
+#X connect 76 2 79 0;
+#X connect 76 3 80 0;
+
+#X connect 87 0 31 0;
+
+#X connect 90 0 94 0;
+#X connect 92 0 94 0;
+#X connect 94 0 95 0;
+#X connect 95 0 96 0;
+#X connect 96 0 97 0;
+#X connect 96 1 100 0;
+#X connect 97 0 98 0;
+#X connect 97 0 99 0;
+#X connect 98 0 97 0;
+#X connect 101 0 99 0;
+#X connect 102 0 99 0;

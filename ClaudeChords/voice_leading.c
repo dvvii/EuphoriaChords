@@ -4,263 +4,428 @@
 #include "m_pd.h"
 
 #define MAX_VOICES 8
+#define MAX_MATRIX_SIZE 16  // For dynamic programming matrix
 #define VERYLARGENUMBER 10000
 #define MODULUS 12
-#define HALFMODULUS (int)(0.5 + MODULUS / 2)
-#define MAX_PERMUTATIONS 24  // 4! permutations for 4 voices
+#define HALFMODULUS 6
 
 static t_class *voice_leading_class;
 
 typedef struct _voice_leading {
     t_object x_obj;
-    t_outlet *x_out_bass;
+    t_outlet *x_out_root;
     t_outlet *x_out_chord;
-    t_outlet *x_out_cost;
     t_outlet *x_out_info;
 
     int current_chord[MAX_VOICES];
     int current_size;
     int root_interval;
+    int chord_structure[MAX_VOICES];
+    int chord_structure_size;
     int chord_intervals[MAX_VOICES];
     int chord_size;
     int feedback_enabled;
     int debug_enabled;
-    int last_vl_cost;  // Store the cost of the last voice leading
-
-    int bijective_vl_size; // Store size from bijective_vl
+    int last_vl_cost;
 } t_voice_leading;
 
-typedef struct vl_path_t {
-    int startPC;
-    int path;
-} vl_path_t;
+typedef struct {
+    int source_note;
+    int target_note;
+} voice_pair_t;
 
-typedef struct vl_result_t {
-    int size;
-    int num_paths;
-    int path[MAX_VOICES];
-    int startPCs[MAX_VOICES]; //  store starting PCs-- needed?
-} vl_result_t;
-
-// Comparison function for qsort (sorts by size)
-static int compare_vl_results(const void *a, const void *b) {
-    vl_result_t *resultA = (vl_result_t *) a;
-    vl_result_t *resultB = (vl_result_t *) b;
-    return resultA->size - resultB->size; // Sort by size (ascending)
+// Helper: calculate PC distance (min of both directions)
+static int pc_distance(int pc1, int pc2) {
+    int forward = (pc2 - pc1 + MODULUS) % MODULUS;
+    int backward = (pc1 - pc2 + MODULUS) % MODULUS;
+    return (forward < backward) ? forward : backward;
 }
 
-// Helper function: comparison for sorting integers
-static int compare_ints(const void *a, const void *b) {
-    return (*(int *) a - *(int *) b);
-}
+// Helper: remove duplicates and sort
+static int remove_duplicates_and_sort(int *input, int input_size, int *output) {
+    if (input_size == 0) return 0;
 
-// Helper function: get random number in range [0, max)
-static int random_range(int max) {
-    return rand() % max;
-}
-
-static void sort_pitch_classes(int *pitches, int size, int *sorted_pcs) {
-    // Convert to pitch classes
-    for (int i = 0; i < size; i++) {
-        sorted_pcs[i] = pitches[i] % 12;
-        if (sorted_pcs[i] < 0) sorted_pcs[i] += 12;
+    // Copy and sort
+    int temp[MAX_VOICES];
+    for (int i = 0; i < input_size; i++) {
+        temp[i] = input[i];
     }
 
-    // Sort (bubble sort)
-    for (int i = 0; i < size - 1; i++) {
-        for (int j = i + 1; j < size; j++) {
-            if (sorted_pcs[j] < sorted_pcs[i]) {
-                int temp = sorted_pcs[i];
-                sorted_pcs[i] = sorted_pcs[j];
-                sorted_pcs[j] = temp;
+    // Bubble sort
+    for (int i = 0; i < input_size - 1; i++) {
+        for (int j = i + 1; j < input_size; j++) {
+            if (temp[j] < temp[i]) {
+                int swap = temp[i];
+                temp[i] = temp[j];
+                temp[j] = swap;
             }
         }
     }
+
+    // Remove duplicates
+    int out_size = 0;
+    output[out_size++] = temp[0];
+    for (int i = 1; i < input_size; i++) {
+        if (temp[i] != temp[i-1]) {
+            output[out_size++] = temp[i];
+        }
+    }
+
+    return out_size;
 }
 
-static vl_path_t *bijective_vl(t_voice_leading *x, int *firstPCs, int *secondPCs, bool sort) {
-    int length = x->current_size;
+// Build the dynamic programming matrix
+static int build_matrix(t_voice_leading *x,
+                        int *source, int source_size,
+                        int *target, int target_size,
+                        int matrix[MAX_MATRIX_SIZE][MAX_MATRIX_SIZE],
+                        int output_matrix[MAX_MATRIX_SIZE][MAX_MATRIX_SIZE]) {
 
-    static vl_result_t fullList[MAX_PERMUTATIONS];
-    static int fullList_count = 0;
-    fullList_count = 0;
+    if (x->debug_enabled) {
+        post("DEBUG: Building matrix %dx%d", target_size, source_size);
+    }
 
-    static vl_path_t currentBest[MAX_VOICES];
-    static int currentBestSize = VERYLARGENUMBER;
-    currentBestSize = VERYLARGENUMBER;
-
-    //rotate secondPCs
-    for (int i = 0; i < length; i++) {
-        int temp = secondPCs[length - 1];
-        for (int j = length - 1; j > 0; j--) {
-            secondPCs[j] = secondPCs[j - 1];
+    // Initialize distance matrix
+    for (int i = 0; i < target_size; i++) {
+        for (int j = 0; j < source_size; j++) {
+            matrix[i][j] = pc_distance(source[j], target[i]);
         }
-        secondPCs[0] = temp;
+    }
 
-        static int newSize = 0;
-        static vl_path_t newPaths[MAX_VOICES];
-
-        //calculate paths for this specific permutation
-        for (int voiceCounter = 0; voiceCounter < length; voiceCounter++) {
-            int voice_path = (secondPCs[voiceCounter] - firstPCs[voiceCounter]) % MODULUS;
-            if (voice_path > HALFMODULUS) {
-                voice_path -= MODULUS;
-            }
-
-            newPaths[voiceCounter].startPC = firstPCs[voiceCounter];
-            newPaths[voiceCounter].path = voice_path;
-            newSize += abs(voice_path);
+    // Initialize output matrix (copy distance matrix)
+    for (int i = 0; i < target_size; i++) {
+        for (int j = 0; j < source_size; j++) {
+            output_matrix[i][j] = matrix[i][j];
         }
+    }
 
-        if (fullList_count < MAX_PERMUTATIONS) {
-            fullList[fullList_count].size = newSize;
-            fullList[fullList_count].num_paths = length;
-            for (int pathIndex = 0; pathIndex < length; pathIndex++) {
-                fullList[fullList_count].path[pathIndex] = newPaths[pathIndex].path;
-            }
-            fullList_count++;
-        }
+    // Fill first row (cumulative)
+    for (int j = 1; j < source_size; j++) {
+        output_matrix[0][j] += output_matrix[0][j-1];
+    }
 
-        if (newSize < currentBestSize) {
-            currentBestSize = newSize;
-            for (int k = 0; k < length; k++) {
-                currentBest[k] = newPaths[k];
-            }
-        }
-        x->bijective_vl_size = currentBestSize;
+    // Fill first column (cumulative)
+    for (int i = 1; i < target_size; i++) {
+        output_matrix[i][0] += output_matrix[i-1][0];
+    }
 
-        if (sort) {
-            qsort(fullList, fullList_count, sizeof(vl_result_t), compare_vl_results);
-            }
+    // Fill rest of matrix with minimum cumulative cost
+    for (int i = 1; i < target_size; i++) {
+        for (int j = 1; j < source_size; j++) {
+            int from_left = output_matrix[i][j-1];
+            int from_above = output_matrix[i-1][j];
+            int from_diagonal = output_matrix[i-1][j-1];
+
+            int min_cost = from_diagonal;
+            if (from_left < min_cost) min_cost = from_left;
+            if (from_above < min_cost) min_cost = from_above;
+
+            output_matrix[i][j] += min_cost;
         }
-    return currentBest; // return pointer to array
+    }
+
+    // Return total cost (minus the last cell's own distance)
+    int total_cost = output_matrix[target_size-1][source_size-1] -
+                     matrix[target_size-1][source_size-1];
+
+    if (x->debug_enabled) {
+        post("DEBUG: Matrix total cost: %d", total_cost);
+    }
+
+    return total_cost;
 }
 
-static void voicelead(t_voice_leading *x,
-                            int *inPitches, int *inPitches_size,
-                            int *targetPCs, int *targetPCs_size,
-                            int topN, int *output, int *output_size) {
-    if (inPitches_size != targetPCs_size) {
-        *output_size = 0;
-         //add PD error log
+// Backtrack through matrix to find voice leading
+static int find_matrix_vl(t_voice_leading *x,
+                          int *source, int source_size,
+                          int *target, int target_size,
+                          int output_matrix[MAX_MATRIX_SIZE][MAX_MATRIX_SIZE],
+                          voice_pair_t *vl) {
+
+    int i = target_size - 1;
+    int j = source_size - 1;
+    int vl_count = 0;
+
+    // Add final pairing
+    vl[vl_count].source_note = source[j];
+    vl[vl_count].target_note = target[i];
+    vl_count++;
+
+    // Backtrack through matrix
+    while (i > 0 || j > 0) {
+        int new_i = i;
+        int new_j = j;
+
+        if (i > 0 && j > 0) {
+            // Can move diagonally, left, or up - choose minimum
+            int diagonal = output_matrix[i-1][j-1];
+            int from_above = output_matrix[i-1][j];
+            int from_left = output_matrix[i][j-1];
+
+            int min_cost = diagonal;
+            new_i = i - 1;
+            new_j = j - 1;
+
+            if (from_above < min_cost) {
+                min_cost = from_above;
+                new_i = i - 1;
+                new_j = j;
+            }
+
+            if (from_left < min_cost) {
+                min_cost = from_left;
+                new_i = i;
+                new_j = j - 1;
+            }
+
+            i = new_i;
+            j = new_j;
+        } else if (i > 0) {
+            i = i - 1;
+        } else if (j > 0) {
+            j = j - 1;
+        }
+
+        vl[vl_count].source_note = source[j];
+        vl[vl_count].target_note = target[i];
+        vl_count++;
     }
 
-    // convert input pitches to PCs and sort them
-    int inPCs[MAX_VOICES];
-    for (int i = 0; i < *inPitches_size; i++) {
-        inPCs[i] = inPitches[i] % MODULUS;
-    }
-    qsort(inPCs, *inPitches_size, sizeof(int), compare_ints);
-
-    //sort target PCs
-    int sortedTargetPCs[MAX_VOICES];
-    for (int i = 0; i < *targetPCs_size; i++) {
-        sortedTargetPCs[i] = targetPCs[i];
-        if (sortedTargetPCs[i] < 0) sortedTargetPCs[i] += MODULUS;
-    }
-    qsort(sortedTargetPCs, *targetPCs_size, sizeof(int), compare_ints);
-
-    // Find the possible bijective voice leadings
-    bool sort = (topN != 1);
-    vl_path_t *paths = bijective_vl(x, inPCs, sortedTargetPCs, sort);
-    int paths_size = *inPitches_size;
-
-    //not using the random topN assignation
-
-    vl_path_t tempPaths[MAX_VOICES];
-    bool path_used[MAX_VOICES];
-    for (int i = 0; i < paths_size; i++) {
-        tempPaths[i] = paths[i];
-        path_used[i] = false;
+    // Reverse the voice leading (we built it backwards)
+    for (int k = 0; k < vl_count / 2; k++) {
+        voice_pair_t temp = vl[k];
+        vl[k] = vl[vl_count - 1 - k];
+        vl[vl_count - 1 - k] = temp;
     }
 
-    // Match each input pitch to its corresponding path
+    if (x->debug_enabled) {
+        post("DEBUG: Found %d voice pairs", vl_count);
+        for (int k = 0; k < vl_count; k++) {
+            post("DEBUG:   [%d] %d -> %d", k, vl[k].source_note, vl[k].target_note);
+        }
+    }
+
+    return vl_count;
+}
+
+// Nonbijective voice leading algorithm
+static void nonbijective_vl(t_voice_leading *x,
+                            int *source_pcs, int source_size,
+                            int *target_pcs, int target_size,
+                            voice_pair_t *best_vl, int *best_vl_size) {
+
+    // Remove duplicates and sort both sets
+    int unique_source[MAX_VOICES];
+    int unique_target[MAX_VOICES];
+    int unique_source_size = remove_duplicates_and_sort(source_pcs, source_size, unique_source);
+    int unique_target_size = remove_duplicates_and_sort(target_pcs, target_size, unique_target);
+
+    if (x->debug_enabled) {
+        post("DEBUG: Unique source size: %d, unique target size: %d",
+             unique_source_size, unique_target_size);
+    }
+
+    int best_cost = VERYLARGENUMBER;
+    voice_pair_t temp_vl[MAX_MATRIX_SIZE];
+    int matrix[MAX_MATRIX_SIZE][MAX_MATRIX_SIZE];
+    int output_matrix[MAX_MATRIX_SIZE][MAX_MATRIX_SIZE];
+
+    // Try all inversions of target
+    for (int inversion = 0; inversion < unique_target_size; inversion++) {
+        // Rotate target
+        int rotated_target[MAX_VOICES];
+        for (int i = 0; i < unique_target_size; i++) {
+            rotated_target[i] = unique_target[(i + inversion) % unique_target_size];
+        }
+
+        if (x->debug_enabled && inversion < 3) {
+            post("DEBUG: Trying inversion %d", inversion);
+        }
+
+        // Build matrix for this inversion
+        int cost = build_matrix(x, unique_source, unique_source_size,
+                               rotated_target, unique_target_size,
+                               matrix, output_matrix);
+
+        if (cost < best_cost) {
+            best_cost = cost;
+
+            // Find voice leading for this inversion
+            int vl_size = find_matrix_vl(x, unique_source, unique_source_size,
+                                        rotated_target, unique_target_size,
+                                        output_matrix, temp_vl);
+
+            // Copy to best
+            *best_vl_size = vl_size;
+            for (int i = 0; i < vl_size; i++) {
+                best_vl[i] = temp_vl[i];
+            }
+        }
+    }
+
+    x->last_vl_cost = best_cost;
+
+    if (x->debug_enabled) {
+        post("DEBUG: Best voice leading cost: %d", best_cost);
+    }
+}
+
+// Apply voice leading to actual pitches
+static void apply_voice_leading(t_voice_leading *x,
+                                int *input_pitches, int input_size,
+                                voice_pair_t *vl, int vl_size,
+                                int *output_pitches, int *output_size) {
+
+    // Create a list of which input pitches are used
+    bool used[MAX_VOICES] = {false};
     *output_size = 0;
-    for (int i = 0; i < *inPitches_size; i++) {
-        int inPitch = inPitches[i];
-        int inPC = inPitch % MODULUS;
-        if (inPC < 0) inPC += MODULUS;
 
-        // Find matching path that hasn't been used yet
-        for (int j = 0; j < paths_size; j++) {
-            if (!path_used[j] && inPC == tempPaths[j].startPC) {
-                output[*output_size] = inPitch + tempPaths[j].path;
-                (*output_size)++;
-                path_used[j] = true;
-                break;
+    // For each voice pair, find the closest input pitch with matching PC
+    for (int i = 0; i < vl_size; i++) {
+        int source_pc = vl[i].source_note % MODULUS;
+        int target_pc = vl[i].target_note % MODULUS;
+
+        // Find unused input pitch with matching source PC
+        int best_input_idx = -1;
+        int best_distance = VERYLARGENUMBER;
+
+        for (int j = 0; j < input_size; j++) {
+            if (used[j]) continue;
+
+            int pitch_pc = input_pitches[j] % MODULUS;
+            if (pitch_pc < 0) pitch_pc += MODULUS;
+
+            if (pitch_pc == source_pc) {
+                // Calculate distance to target
+                int distance = abs(input_pitches[j] - target_pc);
+                if (distance < best_distance) {
+                    best_distance = distance;
+                    best_input_idx = j;
+                }
+            }
+        }
+
+        if (best_input_idx >= 0) {
+            used[best_input_idx] = true;
+
+            // Calculate output pitch (keep it close to input)
+            int input_pitch = input_pitches[best_input_idx];
+            int output_pitch = input_pitch;
+
+            // Find nearest occurrence of target PC
+            int input_pc = input_pitch % MODULUS;
+            if (input_pc < 0) input_pc += MODULUS;
+
+            // Calculate path
+            int path = (target_pc - input_pc + MODULUS) % MODULUS;
+            if (path > HALFMODULUS) path -= MODULUS;
+
+            output_pitch = input_pitch + path;
+            output_pitches[*output_size] = output_pitch;
+            (*output_size)++;
+
+            if (x->debug_enabled) {
+                post("DEBUG: Voice %d: %d (PC %d) -> %d (PC %d)",
+                     i, input_pitch, input_pc, output_pitch, target_pc);
             }
         }
     }
 }
 
-//Main calculation
+// Main calculation
 static void voice_leading_calculate(t_voice_leading *x) {
     if (x->current_size == 0 || x->chord_size == 0) {
-        post("voice_leading: missing chord data");
+        post("voice_leading: missing chord data (current: %d, chord: %d)",
+             x->current_size, x->chord_size);
         return;
     }
-  int output_chord[MAX_VOICES];
-  int output_chord_size = 0;
-  voicelead(x,
-        x->current_chord,
-        &x->current_size,
-        x->chord_intervals,
-        &x->chord_size,
-        1,
-        output_chord,
-        &output_chord_size);
+
     if (x->debug_enabled) {
-            post("DEBUG: Final voice leading solution:");
-            for (int i = 0; i < output_chord_size; i++) {
-
-            post("DEBUG: Voice %d: %d", i, output_chord[i]);
-        }
+        post("\nDEBUG: ===== Starting Nonbijective Voice Leading =====");
+        post("DEBUG: Current chord: [%d %d %d %d]",
+             x->current_chord[0], x->current_chord[1],
+             x->current_chord[2], x->current_chord[3]);
+        post("DEBUG: Target PCs: [%d %d %d %d]",
+             x->chord_intervals[0], x->chord_intervals[1],
+             x->chord_intervals[2], x->chord_intervals[3]);
     }
-        for (int i = x->current_size; i < x->chord_size; i++) {
 
-        }
-        t_atom out_list[MAX_VOICES];
-        for (int i = 0; i < output_chord_size; i++) {
-            SETFLOAT(&out_list[i], output_chord[i]);
-        }
+    // Convert current chord to PCs
+    int source_pcs[MAX_VOICES];
+    for (int i = 0; i < x->current_size; i++) {
+        source_pcs[i] = x->current_chord[i] % MODULUS;
+        if (source_pcs[i] < 0) source_pcs[i] += MODULUS;
+    }
+
+    // Find optimal voice leading using nonbijective algorithm
+    voice_pair_t best_vl[MAX_MATRIX_SIZE];
+    int best_vl_size;
+
+    nonbijective_vl(x, source_pcs, x->current_size,
+                    x->chord_intervals, x->chord_size,
+                    best_vl, &best_vl_size);
+
+    // Apply voice leading to actual pitches
+    int output_chord[MAX_VOICES];
+    int output_chord_size;
+
+    apply_voice_leading(x, x->current_chord, x->current_size,
+                       best_vl, best_vl_size,
+                       output_chord, &output_chord_size);
+
+    if (x->debug_enabled) {
+        post("DEBUG: Output chord: [%d %d %d %d]",
+             output_chord_size > 0 ? output_chord[0] : 0,
+             output_chord_size > 1 ? output_chord[1] : 0,
+             output_chord_size > 2 ? output_chord[2] : 0,
+             output_chord_size > 3 ? output_chord[3] : 0);
+        post("DEBUG: Voice leading cost: %d", x->last_vl_cost);
+        post("DEBUG: Root PC: %d (MIDI note: %d)",
+             x->root_interval, 48 + x->root_interval);
+    }
+
+    // Output results
+    t_atom out_list[MAX_VOICES];
+    for (int i = 0; i < output_chord_size; i++) {
+        SETFLOAT(&out_list[i], output_chord[i]);
+    }
+
     outlet_list(x->x_out_chord, &s_list, output_chord_size, out_list);
-    outlet_float(x->x_out_bass, (t_float)output_chord[0]);
+    outlet_float(x->x_out_root, (t_float)(48 + x->root_interval));
 
     if (x->feedback_enabled) {
-        for (int i = 0; i < output_chord_size; i++) {
-            x->current_chord[i] = output_chord[i];
-        }
+        memcpy(x->current_chord, output_chord, output_chord_size * sizeof(int));
         x->current_size = output_chord_size;
+
+        if (x->debug_enabled) {
+            post("DEBUG: Feedback enabled - updated current chord");
+        }
     }
 }
 
-//set root
-static void voice_leading_root(t_voice_leading *x, t_floatarg f) {
-    int root = (int)f % 12;
-    if (root < 0) root += 12;
-    x->root_interval = root;
-}
-
-//Set current chord (COLD)
+// Set current chord (COLD)
 static void voice_leading_current(t_voice_leading *x, t_symbol *s, int argc, t_atom *argv) {
     if (argc > MAX_VOICES) {
         pd_error(x, "voice_leading: too many voices (max %d)", MAX_VOICES);
         return;
     }
+
     x->current_size = argc;
-    for (int i = 0; i <argc; i++ ) {
+    for (int i = 0; i < argc; i++) {
         x->current_chord[i] = (int)atom_getfloat(&argv[i]);
     }
 
     if (x->debug_enabled) {
         post("voice_leading: current chord set to [%d %d %d %d]",
-            x->current_chord[0], x->current_chord[1],
-            x->current_chord[2], x->current_chord[3]);
+             argc > 0 ? x->current_chord[0] : 0,
+             argc > 1 ? x->current_chord[1] : 0,
+             argc > 2 ? x->current_chord[2] : 0,
+             argc > 3 ? x->current_chord[3] : 0);
     }
 }
 
-//set root interval (COLD)
-static void _voice_leading(t_voice_leading *x, t_floatarg f) {
+// Set root interval (COLD)
+static void voice_leading_root(t_voice_leading *x, t_floatarg f) {
     int root = (int)f % 12;
     if (root < 0) root += 12;
     x->root_interval = root;
@@ -270,22 +435,37 @@ static void _voice_leading(t_voice_leading *x, t_floatarg f) {
     }
 }
 
-// Set chord intervals (HOT)
-static void voice_leading_target(t_voice_leading *x, t_symbol *s, int argc, t_atom *argv) {
+// Set chord structure as intervals from root (HOT)
+static void voice_leading_chord(t_voice_leading *x, t_symbol *s, int argc, t_atom *argv) {
     if (argc > MAX_VOICES) {
         pd_error(x, "voice_leading: too many chord intervals (max %d)", MAX_VOICES);
         return;
     }
 
+    x->chord_structure_size = argc;
+    for (int i = 0; i < argc; i++) {
+        x->chord_structure[i] = (int)atom_getfloat(&argv[i]);
+    }
+
     x->chord_size = argc;
-    for (int i =0; i < argc; i++) {
-        x->chord_intervals[i] = (int)atom_getfloat(&argv[i]);
+    for (int i = 0; i < argc; i++) {
+        int target_pc = (x->root_interval + x->chord_structure[i]) % 12;
+        if (target_pc < 0) target_pc += 12;
+        x->chord_intervals[i] = target_pc;
     }
 
     if (x->debug_enabled) {
-        post("voice_leading: chord set to [%d %d %d %d]",
-            x->chord_intervals[0], x->chord_intervals[1],
-            x->chord_intervals[2], x->chord_intervals[3]);
+        post("voice_leading: chord structure [%d %d %d %d] + root %d",
+             argc > 0 ? x->chord_structure[0] : 0,
+             argc > 1 ? x->chord_structure[1] : 0,
+             argc > 2 ? x->chord_structure[2] : 0,
+             argc > 3 ? x->chord_structure[3] : 0,
+             x->root_interval);
+        post("voice_leading:   = target PCs [%d %d %d %d]",
+             argc > 0 ? x->chord_intervals[0] : 0,
+             argc > 1 ? x->chord_intervals[1] : 0,
+             argc > 2 ? x->chord_intervals[2] : 0,
+             argc > 3 ? x->chord_intervals[3] : 0);
     }
 
     if (x->current_size > 0) {
@@ -295,59 +475,108 @@ static void voice_leading_target(t_voice_leading *x, t_symbol *s, int argc, t_at
     }
 }
 
-//toggle feedback
+// Set target chord intervals (HOT)
+static void voice_leading_target(t_voice_leading *x, t_symbol *s, int argc, t_atom *argv) {
+    if (argc > MAX_VOICES) {
+        pd_error(x, "voice_leading: too many chord intervals (max %d)", MAX_VOICES);
+        return;
+    }
+
+    x->chord_size = argc;
+    for (int i = 0; i < argc; i++) {
+        x->chord_intervals[i] = (int)atom_getfloat(&argv[i]);
+    }
+
+    if (x->debug_enabled) {
+        post("voice_leading: target set to [%d %d %d %d]",
+             argc > 0 ? x->chord_intervals[0] : 0,
+             argc > 1 ? x->chord_intervals[1] : 0,
+             argc > 2 ? x->chord_intervals[2] : 0,
+             argc > 3 ? x->chord_intervals[3] : 0);
+    }
+
+    if (x->current_size > 0) {
+        voice_leading_calculate(x);
+    } else {
+        pd_error(x, "voice_leading: no current chord set");
+    }
+}
+
+// Toggle feedback
 static void voice_leading_feedback(t_voice_leading *x, t_floatarg f) {
     x->feedback_enabled = (f != 0);
     post("voice_leading: feedback %s", x->feedback_enabled ? "enabled" : "disabled");
 }
 
-//toggle debug
+// Toggle debug
 static void voice_leading_debug(t_voice_leading *x, t_floatarg f) {
     x->debug_enabled = (f != 0);
     post("voice_leading: debug %s", x->debug_enabled ? "enabled" : "disabled");
 }
 
-//bang
+// Bang
 static void voice_leading_bang(t_voice_leading *x) {
     voice_leading_calculate(x);
 }
 
 // Constructor
-
 static void *voice_leading_new(void) {
     t_voice_leading *x = (t_voice_leading *)pd_new(voice_leading_class);
 
-    x->x_out_bass = outlet_new(&x->x_obj, &s_float);
+    x->x_out_info = outlet_new(&x->x_obj, &s_list);
     x->x_out_chord = outlet_new(&x->x_obj, &s_list);
+    x->x_out_root = outlet_new(&x->x_obj, &s_float);
 
     x->current_size = 0;
     x->chord_size = 0;
+    x->chord_structure_size = 0;
     x->root_interval = 0;
     x->feedback_enabled = 1;
     x->debug_enabled = 0;
+    x->last_vl_cost = 0;
+
+    memset(x->current_chord, 0, MAX_VOICES * sizeof(int));
+    memset(x->chord_structure, 0, MAX_VOICES * sizeof(int));
+    memset(x->chord_intervals, 0, MAX_VOICES * sizeof(int));
+
+    post("voice_leading: initialized (nonbijective dynamic programming)");
+    post("  Allows unequal voice counts and smart doubling/omission");
+    post("  Two modes: 1) absolute PCs with 'target', 2) root+intervals with 'chord'");
+    post("  Outlets: [root] [chord] [info]");
 
     return (void *)x;
 }
 
-
-
+// Setup
 void voice_leading_setup(void) {
     voice_leading_class = class_new(gensym("voice_leading"),
-                            (t_newmethod)voice_leading_new,
-                            0,
-                            sizeof(t_voice_leading),
-                            CLASS_DEFAULT,
-                            0);
+                                    (t_newmethod)voice_leading_new,
+                                    0,
+                                    sizeof(t_voice_leading),
+                                    CLASS_DEFAULT,
+                                    0);
 
     class_addmethod(voice_leading_class, (t_method)voice_leading_current,
-                        gensym("current"), A_GIMME, 0);
+                    gensym("current"), A_GIMME, 0);
     class_addmethod(voice_leading_class, (t_method)voice_leading_root,
-                        gensym("root"), A_FLOAT, 0);
+                    gensym("root"), A_FLOAT, 0);
+    class_addmethod(voice_leading_class, (t_method)voice_leading_chord,
+                    gensym("chord"), A_GIMME, 0);
     class_addmethod(voice_leading_class, (t_method)voice_leading_target,
-                        gensym("chord"), A_GIMME, 0);
+                    gensym("target"), A_GIMME, 0);
     class_addmethod(voice_leading_class, (t_method)voice_leading_feedback,
-                        gensym("feedback"), A_FLOAT, 0);
+                    gensym("feedback"), A_FLOAT, 0);
     class_addmethod(voice_leading_class, (t_method)voice_leading_debug,
-                        gensym("debug"), A_FLOAT, 0);
+                    gensym("debug"), A_FLOAT, 0);
     class_addbang(voice_leading_class, voice_leading_bang);
+
+    post("voice_leading external loaded (nonbijective algorithm)");
+    post("Usage: [voice_leading]");
+    post("  'current <pitches>' - set current chord (any size)");
+    post("  'target <pcs>' - set target as absolute pitch classes (any size)");
+    post("  'root <pc>' + 'chord <intervals>' - set target as root+intervals");
+    post("  'feedback <0|1>' - enable/disable feedback");
+    post("  'debug <0|1>' - enable/disable debug output");
+    post("Outlets: [root (MIDI)] [chord (list)] [info (list)]");
+    post("NEW: Supports unequal voice counts (3-voice to 4-voice, etc.)");
 }

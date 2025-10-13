@@ -1,6 +1,6 @@
 // Message routing:
 //   'current <notes>' - Set current chord (COLD)
-//   'root <0-11>'     - Set root interval (COLD)  
+//   'root <0-11>'     - Set root interval (COLD)
 //   'chord <ints>'    - Set target chord intervals (HOT - triggers calculation!)
 //
 // Outlets: [bass] [chord] [cost] [info]
@@ -59,7 +59,8 @@ static void reduce_to_prime_form(int *chord, int size, int *prime) {
     }
 }
 
-// Place pitch class around stable centroi
+static int place_around_centroid(int pitch_class, float centroid) {
+    int best_note = 60;  // default to middle C
     float min_distance = 10000.0f;
     int base_octave = (int)(centroid / 12.0f);
     

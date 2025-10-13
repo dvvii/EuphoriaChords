@@ -4,7 +4,7 @@
 UNAME := $(shell uname -s)
 
 # Common settings
-EXTERNALS = hungarian orbifold
+EXTERNALS = orbifold voice_leading
 
 # PD include path (adjust as needed)
 PD_INCLUDE = /usr/include/pd
