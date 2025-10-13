@@ -1,4 +1,4 @@
-#N canvas 456 128 1144 618 12;
+#N canvas 342 183 1066 617 12;
 #N canvas 80 251 954 724 guts 0;
 #X obj 325 48 LedColors;
 #X listbox 330 26 13 0 0 0 - - - 0;
