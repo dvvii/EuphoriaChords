@@ -1,0 +1,109 @@
+song: The Tortured Poets Department
+artist: Taylor Swift
+year: 2014
+BPM: 90
+key: C
+
+b1 C
+l1 You left your
+
+b2 C
+l2 typewriter at my apartment
+
+b3 F
+l3 Straight from the tortured
+
+b4 F
+l4 poets department
+
+b5 C
+l5 I think some things 
+
+b6 C
+l6 I never say,
+
+b7 F
+l7 like who uses
+
+b8 F
+l8 typewriters anyway?
+
+b9 Am7
+l9 but you're in self sabotage modes,
+
+b10 G
+l10 throwing spikes down on the road
+
+b11 C
+l11 But I've seen this episode
+
+b12 F
+l12 and still love to show
+
+b13 Am7
+l13 Who else 
+
+b14 G
+l14 decodes you
+
+b15 C
+l15 And who's gonna
+
+b16 C
+l16 love you like
+
+b17 F
+l17 me
+
+b18 F
+l18 ...
+
+b19 C
+l19 And who's gonna 
+
+b20 C
+l19 know you if not
+
+b21 F 
+l21 me
+
+b22 F
+l22 I laughed in your face and said
+
+b23 Am7
+l23 You're not Dylan Thomas
+
+b24 G
+l24 I'm not Patty Smith
+
+b25 C
+l25 This ain't the Chelsea Hotel
+
+b26 F
+l26 We're modern idiots and
+
+b27 Am7
+l27 who's gonna
+
+b28 G
+l28 love you like
+
+b29 C
+l29 me
+
+b30 C
+l30 ...
+
+b31 F
+l31 Nobody 
+
+b32 F 
+l32 No fucking
+
+b33 C
+l33 body
+
+b34 F 
+l32 Nobody
+
+barCount 34
