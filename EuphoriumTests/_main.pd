@@ -240,6 +240,7 @@
 #X connect 118 0 107 1;
 #X restore 33 36 pd Trill;
 #X obj 33 59 presets;
+#A saved -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \; -empty- \;;
 #X obj 200 91 bng 40 250 50 0 led_6 empty 6 13 20 0 24 #c7c6ff #000000 #000000;
 #X obj 194 200 bng 40 250 50 0 led_1 empty 1 13 20 0 24 #c7c6ff #000000 #000000;
 #X obj 167 147 bng 40 250 50 0 led_2 empty 2 13 20 0 24 #c7c6ff #000000 #000000;
@@ -347,7 +348,7 @@
 #X connect 48 2 11 0;
 #X restore 32 82 pd Neopixel;
 #X obj 286 54 bng 40 250 50 0 LedsOff empty Leds\ Off 0 -10 0 12 #fcfcfc #000000 #000000;
-#N canvas 179 210 450 300 pressure 1;
+#N canvas 179 210 450 300 pressure 0;
 #X obj 21 95 change;
 #X obj 21 17 adc~ 3;
 #X obj 21 124 print pressure;
