@@ -1,7 +1,7 @@
 song: The Tortured Poets Department
 artist: Taylor Swift
 year: 2014
-BPM: 90
+BPM: 111
 key: C
 
 b1 C
@@ -104,6 +104,6 @@ b33 C
 l33 body
 
 b34 F 
-l32 Nobody
+l34 Nobody
 
-barCount 34
+barCount: 34
