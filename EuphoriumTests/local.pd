@@ -1,5 +1,5 @@
-#N canvas 342 183 1066 617 12;
-#N canvas 80 251 954 724 guts 0;
+#N canvas 333 183 1066 617 12;
+#N canvas 13 96 802 724 guts 1;
 #X obj 325 48 LedColors;
 #X listbox 330 26 13 0 0 0 - - - 0;
 #X listbox 325 69 15 0 0 0 - - - 0;
@@ -38,7 +38,7 @@
 #X obj 20 89 oscformat leds setRaw rgb;
 #X obj 20 113 s oscFormatRGB;
 #X obj 19 43 nbx 5 17 -1e+37 1e+37 0 1 empty LedsOffset LedsOffset 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
-#X obj 87 43 nbx 5 17 -1e+37 1e+37 0 1 empty LedsBrightness LedsBrightness 0 -10 0 12 #fcfcfc #000000 #000000 5 256;
+#X obj 87 43 nbx 5 17 -1e+37 1e+37 0 1 empty LedsBrightness LedsBrightness 0 -10 0 12 #fcfcfc #000000 #000000 20 256;
 #X obj 20 66 LedAddress;
 #X msg 600 58 \; AllLeds 0 0 0 \; UpdateLeds 1 \;;
 #X obj 604 32 r LedsOff;
@@ -97,7 +97,7 @@
 #X obj 243 246 bng 40 250 50 0 led_0 empty 0 13 20 0 24 #c7c6ff #000000 #000000;
 #X obj 143 24 bng 40 250 50 0 led_4 empty 4 13 20 0 24 #c7c6ff #000000 #000000;
 #X obj 324 29 bng 40 250 50 0 LedsOff empty Leds\ Off 0 -10 0 12 #fcfcfc #000000 #000000;
-#N canvas 753 614 1243 588 network 1;
+#N canvas 132 253 1243 588 network 1;
 #X floatatom 785 19 5 0 6 0 - prescaler - 0;
 #X obj 785 66 s toNetsend;
 #X floatatom 915 19 5 0 0 0 - padThreshold0 - 0;

@@ -1,0 +1,6 @@
+#N canvas 498 342 450 300 12;
+#X obj 61 47 r Led\$1;
+#X obj 33 25 r AllLeds;
+#X obj 33 79 outlet;
+#X connect 0 0 2 0;
+#X connect 1 0 2 0;

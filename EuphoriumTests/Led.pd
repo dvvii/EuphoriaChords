@@ -1,4 +1,4 @@
-#N canvas 318 123 814 822 12;
+#N canvas 318 50 814 822 12;
 #X obj 270 252 r Led\$1;
 #X obj 242 230 r AllLeds;
 #X obj 307 306 outlet;
