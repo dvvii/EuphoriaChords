@@ -1,0 +1,57 @@
+Artist: Michael Jackson
+Song: Beat it
+Year: 1983
+BPM: 139
+timeSignature: 4/4
+Key: Em
+
+b1 Em
+l1 They told him, don’t you ever
+b2 D
+l2 Come around here, don’t
+b3 Em
+l3 Wanna see your face you better
+b4 D
+l4 Disappear, the
+b5 C
+l5 Fires in their eyes and their
+b6 D
+l6 Words are really clear so
+b7 Em
+l7 Beat it, just
+b8 D
+l8 Beat it
+b9 Em
+l9 You better run you better
+b10 D
+l10 Do what you can
+b11 Em
+l11 Don’t wanna see no blood don’t be a
+b12 D
+l12 Macho man
+b13 C
+l13 You wanna be tough better
+b14 D
+l14 Do what you can so
+b15 Em
+l15 Beat it, but you
+b16 D
+l16 Wanna be bad just
+b17 Em
+l17 Beat it (Beat it)
+b18 D
+l18 (Beat it) Beat it
+b19 Em
+l19 No one wants to be
+b20 D
+l20 Defeated
+b21 Em
+l21 Showin’ how funky and
+b22 D
+l22 Strong is your fight
+b23 Em
+l23 It doesn’t matter
+b24 D
+l24 Whose wrong or right just (beat it)
+
+barCount: 24

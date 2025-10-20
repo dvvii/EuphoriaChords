@@ -1,0 +1,65 @@
+Artist: The Weeknd
+Song: Save your tears
+Year: 2020
+BPM: 118
+timeSignature: 4/4
+Key: C
+
+b1 C
+l1 I saw you
+b2 Am
+l2 Dancing in an empty room
+b3 Em
+l3 you look so
+b4 G
+l4 happy when I’m not with you
+b5 C
+l5 But then you
+b6 Am
+l6 Saw me, caught you by surprise
+b7 Em
+l7 A single
+b8 G
+l8 Teardrop falling from your eyes
+b9 C
+l9 I don’t know
+b10 Am
+l10 why
+b11 Em
+l11 I Run away
+b12 G
+l12 - - - -
+b13 C
+l13 I’ll make you
+b14 Am
+l14 Cry when I
+b15 Em
+l15 Run away
+b16 G
+l16 - - - -
+b17 Dm
+l17 Take me
+b18 Am
+l18 Back cause I ‘wanna stay
+b19 F
+l19 Save your
+b20 G
+l20 Tears for another…
+b21 C
+l21 Save your
+b22 Am
+l22 Tears for another day
+b23 Em
+l23 - - - -
+b24 G
+l24 - - - -
+b25 C
+l25 Save your
+b26 Am
+l26 Tears for another day
+b27 Em
+l27 - - - -
+b28 G
+l28 - - - -
+
+barCount: 28

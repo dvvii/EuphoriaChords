@@ -1,0 +1,57 @@
+Artist: Jason Mraz
+Song: I’m Yours
+Year: 2008
+BPM: 151
+timeSignature: 4/4
+Key: Bmaj
+
+b1 B
+l1 well you done me in
+b2 B
+l2 you bet that I felt it
+b3 F#
+l3 I tried to be chill
+b4 F#
+l4 But you’re so hot that I melted
+b5 G#m
+l5 I fell right through the cracks
+b6 G#m
+l6 - - - -
+b7 E
+l7 Now I’m trying to get back
+b8 E
+l8 - - - -
+b9 B
+l9 Before the cool done run out I’ll be
+b10 B
+l10 giving it my bestest
+b11 F#
+l11 And nothing’s gonna stop me but
+b12 F#
+l12 divine intervention
+b13 G#m
+l13 I reckon it’s again my
+b14 G#m
+l14 Turn
+B15 E
+l15 To win some or to
+b16 E
+l16 learn some but
+b17 B
+l17 I won’t
+b18 B
+l18 Hesitate
+b19 F#
+l19 No more,
+b20 F#
+l20 No more
+b21 G#m
+l21 It
+b22 G#m
+l22 Cannot
+b23 E
+l23 Wait, I’m
+b24 E
+l24 yours
+
+barCount: 24

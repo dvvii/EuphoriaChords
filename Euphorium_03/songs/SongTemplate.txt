@@ -1,0 +1,43 @@
+artist:
+song: 
+year:
+BPM: 
+key: C 
+
+b1 C 
+l1 this is the first bar 
+
+b2 F
+l2 this is the second bar 
+
+b3 
+l3 
+
+b4 
+l4 
+
+b5 
+l5 
+
+b6 
+l6 
+
+b7 
+l7 
+
+b8 
+l8 
+
+b9 
+l9 
+
+b10
+l10
+ 
+b11
+l11
+
+b12
+l12
+
+barCount: 12

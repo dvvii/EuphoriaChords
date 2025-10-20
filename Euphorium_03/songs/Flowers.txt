@@ -1,0 +1,61 @@
+Artist: Miley Cyrus
+Song: Flowers
+Year: 2023
+BPM: 118
+timeSignature: 4/4
+key: Am
+
+b1 Am
+l1 We were good
+b2 Dm
+l2 We were gold
+b3 G
+l3 Kinda dream that
+b4 C
+l4 Can’t be sold
+b5 Am
+l5  We were right
+b6 Dm
+l6 Until we weren’t
+b7 G
+l7 Built a home then
+b8 C
+l8 Watched it burn
+b9 Am
+l9 I didn’t want to leave you
+b10 Dm
+l10 I didn’t want to lie
+b11 E7
+l11 Started to cry
+b12 E7
+l12 then remembered I…
+b13 Am
+l13 I can buy myself
+b14 Dm
+l14 flowers
+b15 G
+l15 write my name in the
+b16 C
+l16 sand
+b17 Am
+l17 Talk to myself
+b18 Dm
+l18 For hours
+b19 G
+l19 Say things you
+b20 C
+l20 Don’t understand
+b21 Am
+l21  I can take myself
+b22 Dm
+l22 Dancing
+b23 G
+l23 I can hold my own
+b24 C
+l24 Hand
+b25 F
+l25 Yeah I can love me better
+b26 E7
+l26 Than you can
+
+barCount: 26

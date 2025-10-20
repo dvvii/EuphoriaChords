@@ -1,0 +1,141 @@
+Artist: Pink Floyd
+song: Wish you were here
+Year: 1975
+BPM: 123
+key: G
+timeSignature: 4/4
+
+b1 C
+l1 So,
+b2 C
+l2 So you think you can
+b3 D
+l3 Tell
+b4 D
+l4 - - Heaven from
+b5 Am
+l5 Hell
+b6 Am
+l6 - - Blue skies from
+b7 G
+l7 Pain
+b8 G
+l8 - - Can you tell a green
+b9 D
+l9 Field
+b10 D
+l10 - - From a cold steel
+b11 C
+l11 Rail
+b12 C
+l12 - - A smile from a
+b13 Am
+l13 Veil
+b14 Am
+l14 - - So you think you can
+b15 G
+l15 Tell
+b16 G
+l16 - - And did they get you to
+b17 C
+l17 Trade
+b18 C
+l18 - - Your heroes for
+b19 D
+l19 Ghosts
+b20 D
+l20 - -Hot ashes for
+b21 Am
+l21 Trees
+b22 Am
+l22 - - Hot air for a
+b23 G
+l23 Cool breeze
+b24 G
+l24 - - Cold comfort for
+b25 D
+l25 Change
+b26 D
+l26 - - And did you
+b27 C
+l27 Exchange a
+b28 C
+b28 Walk on part in the
+b29 Am
+l29 War for
+b30 Am
+l30 a lead role in a
+b31 G
+l31 Cage
+b32 G
+l32 - - Instrumental
+b33 Em
+l33 (Inst)
+b34 Em
+l34 (Inst)
+b35 G
+l35 (Inst)
+b36 G
+l36 (Inst)
+b37 E
+l37 (Inst)
+b38 E
+l38 (Inst)
+b39 G
+l39 (Inst)
+b40 G
+l40 (Inst)
+b41 E
+l41 (Inst)
+b42 E
+l42 (Inst)
+b43 A
+l43 (Inst)
+b44 A
+l44 (Inst)
+b45 E
+l45 (Inst)
+b46 E
+l46 (Inst)
+b47 A
+l47 (Inst)
+b48 A
+l48 (Inst)
+b49 G
+l49 (Inst)
+b50 G
+l50 (Inst)
+b51 C
+l51 How I wish,
+b52 C
+l52 How I wish you were
+b53 D
+l53 Here
+b54 D
+l54 - - We’re just
+b55 Am
+l55 Two lost souls swimming
+b56 Am
+l56 In a fish bowl
+b57 G
+l57 Year after
+b58 G
+l58 Year
+b59 D
+l59 - - Running over the
+b60 D
+l60 Same old ground,
+b61 C
+l61 What have we found
+b62 C
+l62 The same old
+b63 Am
+l63 Feelings
+b64 Am
+l64 - - Wish you were
+b65 G
+l65 Here
+b66 G
+l66 - - - -
+
+barCount: 66

@@ -1,0 +1,61 @@
+Artist: Billie Eilish
+Song: Bad Guy
+Year:2019
+BPM: 135
+timeSignature: 4/4
+Key: Gm
+
+b1 Gm
+l1 White shirt now
+b2 Gm
+l2 Red, my bloody nose
+b3 Gm
+l3 Sleepin’, you’re
+b4 Gm
+l4 On your tippy toes
+b5 Cm
+l5 Creepin’
+b6 Cm
+l6 Around like no one knows
+b7 F
+l7 Think you’re so
+b8 D7
+l8 Criminal
+b9 Gm
+l9 Bruises on
+b10 Gm
+l10 Both my knees for you
+b11 Gm
+l11 Don’t say thank
+b12 Gm
+l12 You or please, I do
+b13 Cm
+l13 What I want
+b14 Cm
+l14 When I’m wanting to
+b15 F
+l15 My soul, So
+b16 D7
+l16 Cynical, So you’re a
+b17 Gm
+l17 Tough guy like it really
+b18 Gm
+l18 Rough guy just can’t get
+b19 Gm
+l19 Enough guy, chest always so
+b20 Gm
+l20 Puffed guy, I’m that
+b21 Cm
+l21 Bad type, make your mama
+b22 Cm
+l22 Sad type, make your girlfriend
+b23 F
+l23 Mad type, might seduce your
+b24 D7
+l24 Dad type, I’m a
+b25 Gm
+l25 Bad Guy
+b26 Gm
+l26 (Duh)
+
+barCount: 26

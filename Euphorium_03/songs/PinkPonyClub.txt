@@ -1,0 +1,73 @@
+Artist: Chappell Roan
+Song: Pink Pony Club
+Year: 2023
+BPM: 107
+timeSignature: 4/4
+Key: F#
+
+b1 F#
+l1 I know you
+b2 G#m
+l2 wanted me to stay but I
+b3 D#m
+l3 Can’t ignore these crazy vision
+b4 B
+l4 Of me in L.A and
+b5 F#
+l5 I heard that
+b6 G#m
+l6 There’s a special place where
+b7 D#m
+l7 Boys and girls can all be queens
+b8 B
+l8 Every single day
+b9 F#
+l9 I’m having wicked dreams
+b10 G#m
+l10 Of leaving Tennessee
+b11 D#m
+l11 Oh, Santa Monica
+b12 B
+l12 I swear it’s calling me
+b13 F#
+l13 Won’t make my mama proud
+b14 G#m
+l14 It’s gonna cause a scene
+b15 D#m
+l15 She sees her baby girl
+b16 B
+l16 I know she’s gonna scream
+b17 F#
+l17 God, what have you
+b18 G#m
+l18 Done? You’re a pink pony
+b19 D#m
+l19 Girl and you dance at the
+b20 B
+l20 Club oh mama,
+b21 F#
+l21 I’m just having
+b22 G#m
+l22 Fun on the stage in my
+b23 D#m
+l23 heels, It’s where I
+b24 B
+l24 Belong down at the…
+b25 F#
+l25 Pink Pony Club
+b26 G#m
+l26 I’m gonna keep on dancing at the
+b27 D#m
+l27 Pink Pony Club
+b28 B
+l28 I’m gonna keep on dancing down in
+b29 F#
+l29 West Hollywood
+b30 G#m
+l30 I’m gonna keep on dancing at the
+b31 D#m
+l31 Pink Pony Club
+b32 B
+l32 Pink Pony Club
+
+barCount: 32

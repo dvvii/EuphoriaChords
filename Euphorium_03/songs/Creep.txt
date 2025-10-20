@@ -1,0 +1,57 @@
+Artist: Radiohead
+Song: Creep
+Year: 1993
+BPM: 91
+Key: G
+timeSignature: 4/4
+
+b1 G
+l1 (when you were here) before
+b2 G
+l2 - - Couldn’t look you in the
+b3 B
+l3 Eyes
+b4 B
+l4 - - You’re just like an
+b5 C
+l5 Angel
+b6 C
+l6 - -Your skin makes me
+b7 Cm
+l7 Cry
+b8 Cm
+l8 - -You float like a
+b9 G
+l9 Feather
+b10 G
+l10 - -In a beautiful
+b11 B
+l11 World
+b12 B
+l12 - - I wish I was
+b13 C
+l13 Special
+b14 C
+l14 - - You’re so fucking
+b15 Cm
+l15 Special
+b16 Cm
+l16 - - I’m a
+b17 G
+l17 Creep
+b18 G
+l18 - - I’m a
+b19 B
+l19 Weirdo
+b20 B
+l20 - - What the hell am I doing
+b21 C
+l21 Here
+b22 C
+l22 - - I don’t be-
+b23 Cm
+l23 long here
+b24 Cm
+l24 - - - -
+
+barCount: 24
