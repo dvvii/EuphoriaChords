@@ -1,52 +1,152 @@
 function setup() {
-	//Create a thin canvas where to allocate the elements (this is not strictly neccessary because
-	//we will use DOM elements which can be allocated directly in the window)
-	createCanvas(windowWidth /5, windowHeight * 2 / 3);
-	let buffer = [0,0]
+	// Create a canvas
+	createCanvas(windowWidth, windowHeight);
+	let buffer = [0, 0]
 
-	tSlider = createSlider(0, 100, 60);
-	dSlider = createSlider(0, 100, 50);
+	// Create key selector
+	keySelector = createSelect();
+	keySelector.option('C', 0);
+	keySelector.option('C#/Db', 1);
+	keySelector.option('D', 2);
+	keySelector.option('D#/Eb', 3);
+	keySelector.option('E', 4);
+	keySelector.option('F', 5);
+	keySelector.option('F#/Gb', 6);
+	keySelector.option('G', 7);
+	keySelector.option('G#/Ab', 8);
+	keySelector.option('A', 9);
+	keySelector.option('A#/Bb', 10);
+	keySelector.option('B', 11);
+	keySelector.selected('C');
 
-	cButton= createButton("C");
-//	cButton.mouseClicked(changeButtonState)
+	// Create sliders
+	toneSlider = createSlider(0, 100, 50);
+	decaySlider = createSlider(0, 2000, 500);
+	modSlider = createSlider(0, 32, 5);
+	adsrSlider = createSlider(0, 50, 10);
+	vibFreqSlider = createSlider(0, 127, 0);
+	vibDepthSlider = createSlider(0, 127, 0);
 
-	//Text
-	p1 = createP("Tone:");
-	p2 = createP("Decay:");
+	// Create text elements
+	p0 = createP("Key");
+	p1 = createP("Tone");
+	p2 = createP("Decay");
+	p3 = createP("Modulation");
+	p4 = createP("ADSR");
+	p5 = createP("Vibrato Frequency");
+	p6 = createP("Vibrato Depth");
 
-	//This function will format colors and positions of the DOM elements (sliders, button and text)
+	// Format DOM elements with styling
 	formatDOMElements();
-
 }
 
 function draw() {
+	// Background gradient effect
+	background(10, 10, 46);
 
-    background(5,5,255,1);
-	_tSlider = tSlider.value()/100;
-    _dSlider = dSlider.value()*2000;
-	
-	Bela.control.send({tone: _tSlider});
-	Bela.control.send({decay: _dSlider});
+	// Get key selector value
+	_keyValue = int(keySelector.value());
 
-//
-	
-//store values in the buffer
-//	buffer[0]=tSlider.value()/100;
-//	buffer[1]=dSlider.value()/100;
+	// Get slider values
+	_toneSlider = toneSlider.value() / 100;
+	_decaySlider = decaySlider.value();
+	_modSlider = modSlider.value();
+	_adsrSlider = adsrSlider.value();
+	_vibFreqSlider = vibFreqSlider.value();
+	_vibDepthSlider = vibDepthSlider.value();
 
-	//SEND BUFFER to Bela. Buffer has index 0 (to be read by Bela),
-	//contains floats and sends the 'buffer' array.
-  //  Bela.data.sendBuffer(0, 'float', [100, 102]);
+	// Send to Bela (if connected)
+	if (typeof Bela !== 'undefined') {
+		Bela.control.send({key: _keyValue});
+		Bela.control.send({tone: _toneSlider});
+		Bela.control.send({decay: _decaySlider});
+		Bela.control.send({mod: _modSlider});
+		Bela.control.send({adsr: _adsrSlider});
+		Bela.control.send({vibFreq: _vibFreqSlider});
+		Bela.control.send({vibDepth: _vibDepthSlider});
+	}
 }
 
 function formatDOMElements() {
+	// Calculate center position and starting Y position
+	let centerX = windowWidth / 2;
+	let startY = 80;
+	let spacing = 90;
+	let sliderWidth = min(300, windowWidth - 80);
 
-	//Format sliders
-	tSlider.position((windowWidth-tSlider.width)/2,windowHeight/2 + 20);
-	dSlider.position((windowWidth-dSlider.width)/2,windowHeight/2 + 90);
+	// Style and position key selector
+	styleSelector(keySelector, centerX, startY, sliderWidth);
 
+	// Style and position sliders (with offset for key selector)
+	styleSlider(toneSlider, centerX, startY + spacing, sliderWidth);
+	styleSlider(decaySlider, centerX, startY + spacing * 2, sliderWidth);
+	styleSlider(modSlider, centerX, startY + spacing * 3, sliderWidth);
+	styleSlider(adsrSlider, centerX, startY + spacing * 4, sliderWidth);
+	styleSlider(vibFreqSlider, centerX, startY + spacing * 5, sliderWidth);
+	styleSlider(vibDepthSlider, centerX, startY + spacing * 6, sliderWidth);
 
-	//Format text as paragraphs
-	p1.position((windowWidth-tSlider.width)/2,windowHeight/2-20);
-	p2.position((windowWidth-dSlider.width)/2,windowHeight/2+50);
+	// Style and position text labels
+	styleLabel(p0, centerX, startY - 35, sliderWidth);
+	styleLabel(p1, centerX, startY + spacing - 35, sliderWidth);
+	styleLabel(p2, centerX, startY + spacing * 2 - 35, sliderWidth);
+	styleLabel(p3, centerX, startY + spacing * 3 - 35, sliderWidth);
+	styleLabel(p4, centerX, startY + spacing * 4 - 35, sliderWidth);
+	styleLabel(p5, centerX, startY + spacing * 5 - 35, sliderWidth);
+	styleLabel(p6, centerX, startY + spacing * 6 - 35, sliderWidth);
+}
+
+function styleSlider(slider, x, y, width) {
+	slider.position(x - width / 2, y);
+	slider.style('width', width + 'px');
+	slider.style('height', '8px');
+	slider.style('background', 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)');
+	slider.style('border-radius', '10px');
+	slider.style('outline', 'none');
+	slider.style('opacity', '0.9');
+	slider.style('-webkit-appearance', 'none');
+	slider.style('appearance', 'none');
+
+	// Add container styling
+	slider.style('padding', '16px 20px');
+	slider.style('background-color', 'rgba(255, 255, 255, 0.05)');
+	slider.style('border', '1px solid rgba(102, 126, 234, 0.2)');
+	slider.style('border-radius', '16px');
+	slider.style('box-shadow', '0 4px 20px rgba(0, 0, 0, 0.3)');
+}
+
+function styleSelector(selector, x, y, width) {
+	selector.position(x - width / 2, y);
+	selector.style('width', width + 'px');
+	selector.style('height', '48px');
+	selector.style('background-color', 'rgba(255, 255, 255, 0.05)');
+	selector.style('color', '#e0e0ff');
+	selector.style('border', '1px solid rgba(102, 126, 234, 0.2)');
+	selector.style('border-radius', '16px');
+	selector.style('padding', '12px 20px');
+	selector.style('font-family', '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif');
+	selector.style('font-size', '16px');
+	selector.style('font-weight', '600');
+	selector.style('outline', 'none');
+	selector.style('box-shadow', '0 4px 20px rgba(0, 0, 0, 0.3)');
+	selector.style('-webkit-appearance', 'none');
+	selector.style('appearance', 'none');
+}
+
+function styleLabel(label, x, y, width) {
+	label.position(x - width / 2, y);
+	label.style('width', width + 'px');
+	label.style('color', '#e0e0ff');
+	label.style('font-family', '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif');
+	label.style('font-size', '14px');
+	label.style('font-weight', '600');
+	label.style('letter-spacing', '1px');
+	label.style('text-transform', 'uppercase');
+	label.style('margin', '0');
+	label.style('padding', '0');
+	label.style('text-align', 'left');
+}
+
+function windowResized() {
+	resizeCanvas(windowWidth, windowHeight);
+	formatDOMElements();
 }

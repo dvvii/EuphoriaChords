@@ -1,0 +1,76 @@
+function setup() {
+    //Create a thin canvas where to allocate the elements (this is not strictly neccessary because
+    //we will use DOM elements which can be allocated directly in the window)
+    createCanvas(windowWidth /5, windowHeight * 2 / 3);
+    let buffer = [0,0]
+
+    toneSlider = createSlider(0, 100, 60);
+    decaySlider = createSlider(0, 100, 50);
+    modSlider = createSlider(0, 100, 60);
+    adsrSlider = createSlider(0, 100, 50);
+    vibFreqSlider = createSlider(0, 100, 60);
+    vibDepthSlider = createSlider(0, 100, 50);
+
+
+//	cButton= createButton("C");
+//	cButton.mouseClicked(changeButtonState)
+
+    //Text
+    p1 = createP("Tone:");
+    p2 = createP("Decay:");
+    p1 = createP("Mod:");
+    p2 = createP("ADSR:");
+    p1 = createP("Vibrato Frequency:");
+    p2 = createP("Vibrato Depth:");
+
+    //This function will format colors and positions of the DOM elements (sliders, button and text)
+    formatDOMElements();
+
+}
+
+function draw() {
+
+    background(5,5,255,1);
+    _toneSlider = toneSlider.value()/100;
+    _decaySlider = decaySlider.value()*2000;
+    _modSlider = modSlider.value()/100;
+    _adsrSlider = adsrSlider.value()/100;
+    _vibFreqSlider = vibFreqSlider.value()/100;
+    _vibDepthSlider = vibDepthSlider.value()/100;
+
+    Bela.control.send({tone: _toneSlider});
+    Bela.control.send({decay: _decaySlider});
+    Bela.control.send({mod: _modSlider});
+    Bela.control.send({adsr: _adsrSlider});
+    Bela.control.send({vibFreq: _vibFreqSlider});
+    Bela.control.send({vibDepth: _vibDepthSlider});
+
+//
+
+//store values in the buffer
+//	buffer[0]=tSlider.value()/100;
+//	buffer[1]=dSlider.value()/100;
+
+    //SEND BUFFER to Bela. Buffer has index 0 (to be read by Bela),
+    //contains floats and sends the 'buffer' array.
+    //  Bela.data.sendBuffer(0, 'float', [100, 102]);
+}
+
+function formatDOMElements() {
+
+    //Format sliders
+    toneSlider.position((windowWidth-tSlider.width)/2,windowHeight/2 + 20);
+    decaySlider.position((windowWidth-dSlider.width)/2,windowHeight/2 + 90);
+    modSlider.position((windowWidth-tSlider.width)/2,windowHeight/2 + 130);
+    adsrSlider.position((windowWidth-dSlider.width)/2,windowHeight/2 + 190);
+    vibFreqSlider.position((windowWidth-tSlider.width)/2,windowHeight/2 + 230);
+    vibDepthSlider.position((windowWidth-dSlider.width)/2,windowHeight/2 + 290);
+
+    //Format text as paragraphs
+    p1.position((windowWidth-toneSlider.width)/2,windowHeight/2-20);
+    p2.position((windowWidth-decaySlider.width)/2,windowHeight/2+50);
+    p3.position((windowWidth-modSlider.width)/2,windowHeight/2-20);
+    p4.position((windowWidth-adsrSlider.width)/2,windowHeight/2+50);
+    p5.position((windowWidth-vibFreqSlider.width)/2,windowHeight/2-20);
+    p6.position((windowWidth-vibDepthSlider.width)/2,windowHeight/2+50);
+}
