@@ -1,0 +1,55 @@
+Artist: Ben E King
+Song: Stand By Me
+Year: 1961
+BPM: 118 4/4
+Key: A
+
+b1 A
+l1 When the night
+b2 A
+l2 Has come
+b3 F#m
+l3 And the land
+b4 F#m
+l4 Is dark
+b5 D
+l5 And the moon
+b6 E
+l6 Is the only
+b7 A
+l7 Light we’ll see
+b8 A
+l8 —-----
+b9 A
+l9 No, I won’t
+b10 A
+L10 Be afraid
+b11 F#m
+L11 No I won’t shed
+b12 F#m
+l12 A tear
+b13 D
+l13 Just as long
+b14 E
+l14 As you stand
+b15 A
+l15 Stand by me
+b16 A
+l16 and darlin, darlin
+b17 A
+l17 Stand by
+b18 A
+l18 Me, Oh
+b19 F#m
+l19 Stand by
+b20 F#m
+l20 Me
+b21 D
+l21 Oh
+b22 E
+l22 won’t you stand
+b23 A
+l23 Stand by me
+b24 A
+l24 - - - -
+barCount: 24
