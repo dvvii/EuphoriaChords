@@ -1,4 +1,4 @@
-#N canvas 39 37 973 309 12;
+#N canvas -1 31 1125 436 12;
 #X declare -path /cyclone;
 #X listbox 12 10 36 0 0 2 - artist - 24;
 #X obj 244 97 bng 40 250 50 0 reset empty Stop 0 -10 0 12 #ff0400 #c7c6ff #000000;
@@ -9,13 +9,13 @@
 #X obj 198 97 bng 40 250 50 0 loadSong empty Load 0 -10 0 12 #c7c6ff #c7c6ff #000000;
 #X obj 152 97 bng 40 250 50 0 openPanel empty Open 0 -10 0 12 #c6feff #c7c6ff #000000;
 #X obj 879 70 bng 40 250 50 0 led_6 L11 vii 13 20 0 12 #fcfcfc #404040 #404040;
-#X obj 873 179 bng 40 250 50 0 led_1 L7 V 17 20 0 12 #fcfcfc #404040 #404040;
+#X obj 873 179 bng 40 250 50 0 led_1 L7 V 17 20 0 12 #fcfcfc #f8d8fc #404040;
 #X obj 846 126 bng 40 250 50 0 led_2 L2 ii 13 20 0 12 #fcfcfc #404040 #404040;
 #X obj 817 71 bng 40 250 50 0 led_3 L9 vi 13 20 0 12 #fcfcfc #404040 #404040;
 #X obj 860 12 bng 40 250 50 0 led_5 L3 iii 13 20 0 12 #fcfcfc #404040 #404040;
-#X obj 904 235 bng 40 250 50 0 led_0 L0 I 17 20 0 12 #fcfcfc #404040 #404040;
-#X obj 796 14 bng 40 250 50 0 led_4 L5 IV 13 20 0 12 #fcfcfc #f8d8fc #404040;
-#N canvas 137 268 967 645 metronome 1;
+#X obj 904 235 bng 40 250 50 0 led_0 L0 I 17 20 0 12 #fcfcfc #f8d8fc #404040;
+#X obj 796 14 bng 40 250 50 0 led_4 L5 IV 13 20 0 12 #fcfcfc #404040 #404040;
+#N canvas 137 227 967 645 metronome 0;
 #X obj 406 57 sel 0 1 2 3;
 #X obj 406 34 r barLeds;
 #X obj 436 530 dac~;
@@ -49,7 +49,7 @@
 #X obj 184 115 bng 19 250 50 0 empty be4 empty 0 -10 0 12 #fcfcfc #000000 #000000;
 #X obj 110 173 nbx 5 17 0 4000 0 1 metroPitch empty Metronome\ Pitch 0 -10 0 12 #fcfcfc #000000 #000000 2009 256;
 #X obj 226 174 nbx 5 17 0 100 0 1 metroTickLength empty Metronome\ Tick 0 -10 0 12 #fcfcfc #000000 #000000 50 256;
-#X obj 224 121 nbx 5 17 0 1 0 1 metroVol empty Metronome\ Volume 0 -10 0 12 #fcfcfc #000000 #000000 1 256;
+#X obj 224 121 nbx 5 17 0 1 0 1 metroVol empty Metronome\ Volume 0 -10 0 12 #fcfcfc #000000 #000000 0 256;
 #X msg 665 97 \; metroPitch 2000 \; metroTickLength 50 \; metroVol 0.05 \;;
 #X obj 665 75 loadbang;
 #X connect 0 0 6 0;
@@ -96,7 +96,7 @@
 #X listbox 11 179 7 0 0 2 Key songKey - 24;
 #X listbox 11 44 36 0 0 2 - song - 24;
 #X listbox 360 145 36 0 0 2 - songLine - 16;
-#N canvas 5 75 1399 678 guts 1;
+#N canvas 0 334 1399 460 guts 1;
 #X obj 24 333 text search song;
 #X obj 188 332 text search song;
 #X obj 188 356 text get song;
@@ -186,7 +186,7 @@
 #X obj 873 189 + 12;
 #X obj 873 213 % 12;
 #X obj 1025 112 r beat;
-#X obj 889 265 f;
+#X obj 882 265 f;
 #X floatatom 884 293 5 0 0 0 - - - 0;
 #X obj 825 466 bng 40 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #dce4fc #fcfcfc;
 #X msg 822 443 color 0 8 0;
@@ -228,6 +228,7 @@
 #X msg 187 305 symbol Song:;
 #X msg 182 448 symbol Key:;
 #X obj 340 430 counter 0 23;
+#X obj 805 136 t b f;
 #X connect 0 0 11 0;
 #X connect 1 0 2 0;
 #X connect 2 0 5 0;
@@ -294,7 +295,7 @@
 #X connect 73 0 74 0;
 #X connect 74 0 75 0;
 #X connect 74 1 76 0;
-#X connect 76 0 83 0;
+#X connect 76 0 129 0;
 #X connect 77 0 78 0;
 #X connect 78 0 79 0;
 #X connect 79 0 80 0;
@@ -347,4 +348,6 @@
 #X connect 126 0 1 0;
 #X connect 127 0 50 0;
 #X connect 128 0 23 0;
+#X connect 129 0 87 0;
+#X connect 129 1 83 0;
 #X restore 251 242 pd guts;
