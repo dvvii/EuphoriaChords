@@ -1,6 +1,3 @@
-//
-// Created by Daniel Villegas on 2025-10-20.
-//
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
@@ -335,71 +332,7 @@ static void apply_voice_leading(t_voice_leading *x,
     }
 }
 
-// Reorder output by chord function (root, third, fifth, seventh)
-static void reorder_by_function(t_voice_leading *x,
-                                int *voice_led_chord, int voice_led_size,
-                                int *functional_output, int *functional_size) {
-
-    if (x->chord_structure_size == 0) {
-        // No chord structure defined, return as-is
-        memcpy(functional_output, voice_led_chord, voice_led_size * sizeof(int));
-        *functional_size = voice_led_size;
-        return;
-    }
-
-    // Map each chord structure interval to the lowest pitch that matches
-    int function_pitches[MAX_VOICES];
-    bool function_found[MAX_VOICES] = {false};
-
-    for (int i = 0; i < x->chord_structure_size; i++) {
-        function_pitches[i] = -1;  // -1 means not found yet
-    }
-
-    // For each output pitch, find which chord function it represents
-    for (int i = 0; i < voice_led_size; i++) {
-        int pitch = voice_led_chord[i];
-        int pc = pitch % MODULUS;
-        if (pc < 0) pc += MODULUS;
-
-        // Find which chord structure interval this matches
-        for (int j = 0; j < x->chord_structure_size; j++) {
-            int target_pc = (x->root_interval + x->chord_structure[j]) % MODULUS;
-            if (target_pc < 0) target_pc += MODULUS;
-
-            if (pc == target_pc) {
-                // This pitch matches this chord function
-                if (!function_found[j] || pitch < function_pitches[j]) {
-                    // Take the lowest occurrence of this function
-                    function_pitches[j] = pitch;
-                    function_found[j] = true;
-                }
-                break;
-            }
-        }
-    }
-
-    // Build output in functional order
-    *functional_size = 0;
-    for (int i = 0; i < x->chord_structure_size; i++) {
-        if (function_found[i]) {
-            functional_output[*functional_size] = function_pitches[i];
-            (*functional_size)++;
-        }
-    }
-
-    if (x->debug_enabled) {
-        post("DEBUG: Reordered by function:");
-        const char* function_names[] = {"root", "third", "fifth", "seventh"};
-        for (int i = 0; i < *functional_size; i++) {
-            int func_idx = (i < 4) ? i : 3;
-            post("DEBUG:   [%s] = %d",
-                 (i < x->chord_structure_size) ? function_names[i] : "extra",
-                 functional_output[i]);
-        }
-    }
-}
-
-// Main calculation function
+// Main calculation
 static void voice_leading_calculate(t_voice_leading *x) {
     if (x->current_size == 0 || x->chord_size == 0) {
         post("voice_leading: missing chord data (current: %d, chord: %d)",
@@ -440,39 +373,27 @@ static void voice_leading_calculate(t_voice_leading *x) {
                        best_vl, best_vl_size,
                        output_chord, &output_chord_size);
 
-    // Reorder output by chord function (root, third, fifth, seventh)
-    int functional_output[MAX_VOICES];
-    int functional_output_size;
-    reorder_by_function(x, output_chord, output_chord_size,
-                       functional_output, &functional_output_size);
-
     if (x->debug_enabled) {
-        post("DEBUG: Voice-led output: [%d %d %d %d]",
+        post("DEBUG: Output chord: [%d %d %d %d]",
              output_chord_size > 0 ? output_chord[0] : 0,
              output_chord_size > 1 ? output_chord[1] : 0,
              output_chord_size > 2 ? output_chord[2] : 0,
              output_chord_size > 3 ? output_chord[3] : 0);
-        post("DEBUG: Functional output: [%d %d %d %d]",
-             functional_output_size > 0 ? functional_output[0] : 0,
-             functional_output_size > 1 ? functional_output[1] : 0,
-             functional_output_size > 2 ? functional_output[2] : 0,
-             functional_output_size > 3 ? functional_output[3] : 0);
         post("DEBUG: Voice leading cost: %d", x->last_vl_cost);
         post("DEBUG: Root PC: %d (MIDI note: %d)",
              x->root_interval, 48 + x->root_interval);
     }
 
-    // Output results (functional order)
+    // Output results
     t_atom out_list[MAX_VOICES];
-    for (int i = 0; i < functional_output_size; i++) {
-        SETFLOAT(&out_list[i], functional_output[i]);
+    for (int i = 0; i < output_chord_size; i++) {
+        SETFLOAT(&out_list[i], output_chord[i]);
     }
 
-    outlet_list(x->x_out_chord, &s_list, functional_output_size, out_list);
+    outlet_list(x->x_out_chord, &s_list, output_chord_size, out_list);
     outlet_float(x->x_out_root, (t_float)(48 + x->root_interval));
 
     if (x->feedback_enabled) {
-        // Store the voice-led output (not functional order) for next iteration
         memcpy(x->current_chord, output_chord, output_chord_size * sizeof(int));
         x->current_size = output_chord_size;
 
@@ -620,7 +541,6 @@ static void *voice_leading_new(void) {
 
     post("voice_leading: initialized (nonbijective dynamic programming)");
     post("  Allows unequal voice counts and smart doubling/omission");
-    post("  Output ordered by FUNCTION: [root, third, fifth, seventh]");
     post("  Two modes: 1) absolute PCs with 'target', 2) root+intervals with 'chord'");
     post("  Outlets: [root] [chord] [info]");
 
@@ -658,7 +578,5 @@ void voice_leading_setup(void) {
     post("  'feedback <0|1>' - enable/disable feedback");
     post("  'debug <0|1>' - enable/disable debug output");
     post("Outlets: [root (MIDI)] [chord (list)] [info (list)]");
-    post("Output chord format: [root_pitch, third_pitch, fifth_pitch, seventh_pitch]");
     post("NEW: Supports unequal voice counts (3-voice to 4-voice, etc.)");
-    post("NEW: Output always ordered by chord function, not voice position");
 }
